@@ -70,4 +70,15 @@ function game () {
     console.log("You Lose")
 }
 
-console.log(game())
+// function setplayerStatus (name,score) {
+//     document.getElementById('player-name').textContent = name
+//     // return name;
+// }
+const playerName = document.getElementById('player-name')
+
+playerName.textContent = ((name) => name = prompt('Player Name!: ','player'))()
+
+console.log(setplayerStatus(playerName,2))
+
+
+// console.log(game())
