@@ -1,26 +1,35 @@
-//create function that controls the flow of the game
+(function setplayerName () {
+    const playerName = document.getElementById('player-name')
+
+    playerName.textContent = ((name) => name = prompt('Player Name!: ','player'))()
+
+})()
+
+
+function displayScores (playerScore,cpuScore) {
+    let playerBoard = document.querySelector('.player.score')
+    let cpuBoard = document.querySelector('.computer.score')
+
+    playerBoard.innerText = playerScore;
+    cpuBoard.innerText = cpuScore;
+}
+
+
 function playRound (userPlay,computerPlay){
 
-    console.log(userPlay,computerPlay)
     if (userPlay == computerPlay){
         console.log("tie!")
     } else {
         return gameLogic(userPlay,computerPlay)
     }
-    
+
 }
 
+let getcpuPlay = () => {
+    const plays = ["rock","paper","scissors"]
 
-let getPlays = () =>  {
-    const plays = ["rock","paper","scissors"]  
-
-    let computerPlay = (() => plays[Math.floor(Math.random() * 3)])()  //create random number to pick random play from array
-    let userPlay = prompt("Please enter either rock paper or scissors"," ").toLowerCase()
-
-    while(plays.indexOf(userPlay) == -1) {userPlay = prompt("Please enter a valid play"," ")}//check if player has input a valid answer
-    
-    return [userPlay,computerPlay]
-}
+    return plays[Math.floor(Math.random() * 3)]
+}  //create random number to pick random play from array
 
 
 
@@ -40,45 +49,55 @@ function gameLogic (userPlay,computerPlay){
         default: console.log("You Fuch");
         break;
     }
-}          
-
-function game () {
-    let counter = 0;
-    let cpuCounter = 0;
-    for (let i = 0; i < 5; i++) {
-        let arr = getPlays();
-        let round = playRound(arr[0],arr[1])
-
-
-        if (round) {
-            console.log(`You Win ${arr[0]} beats ${arr[1]}!`);
-            counter ++;
-            console.log("counter: " + counter)
-            console.log("cpu: " + cpuCounter)
-        } else if (round != undefined){
-            console.log(`You lose ${arr[1]} beats ${arr[0]}!`)
-            cpuCounter ++
-            console.log("counter: " + counter)
-            console.log("cpu: " + cpuCounter)
-        }else {i --}
-    }
-
-    if (counter - cpuCounter > 0|| false) {
-        console.log("You Win")
-        return
-    }
-    console.log("You Lose")
 }
 
-// function setplayerStatus (name,score) {
-//     document.getElementById('player-name').textContent = name
-//     // return name;
-// }
-const playerName = document.getElementById('player-name')
+let counter = 0;
+let cpuCounter = 0;
 
-playerName.textContent = ((name) => name = prompt('Player Name!: ','player'))()
+function updategameLog (round) { 
+    
+    displayScores(counter,cpuCounter)
+    if (cpuCounter + counter == 5 || cpuCounter == 3 || counter == 3) { //checks if rounds total 5 
+        counter = cpuCounter = 0
+        return console.log("Game Done")
+    }
+    console.log("Play Again")
+}
 
-console.log(setplayerStatus(playerName,2))
+function displayGame (round,userPlay,cpuPlay) {
+    
+    if (round) {
+        console.log(`You Win ${userPlay} beats ${cpuPlay}!`);
+        counter ++;
+        console.log("counter: " + counter)
+        console.log("cpu: " + cpuCounter)
+    } else if (round != undefined){
+        console.log(`You lose ${cpuPlay} beats ${userPlay}!`)
+        cpuCounter ++
+        console.log("counter: " + counter)
+        console.log("cpu: " + cpuCounter)
+    }
 
+    return [counter,cpuCounter]
+}
 
+//when the click event is fired you want to play a round,
+//log those results, then you want to display the results
+// of that round to the ui
+let cards = document.querySelectorAll(".card")
+
+cards.forEach(card => {
+    card.addEventListener('click',e => {
+
+        let userChoice = e.target.innerText
+        let cpuPlay = getcpuPlay()
+        let roundRes = playRound(userChoice,cpuPlay)
+
+        displayGame(roundRes,userChoice,cpuPlay)
+        updategameLog()
+
+        console.log("----------")
+        // console.log(roundRes)
+    })
+})
 // console.log(game())
